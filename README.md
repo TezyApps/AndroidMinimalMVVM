@@ -26,3 +26,54 @@ A learning project exploring a minimal MVVM architecture on Android using Jetpac
 - `FakeCounterRepository.kt` — In-memory fake repository used for testing.
 - `CounterScreen.kt` — Compose UI that renders state and dispatches actions.
 - `MainActivity.kt` — Hosts the Compose screen and wires up the ViewModel factory.
+
+## Architecture
+
+Each diagram covers one layer in isolation to keep things easy to follow.
+
+### Presentation — UI
+
+`CounterScreen` is a pure function of state: it renders `CounterUIState` and emits `CounterAction`s. It has no knowledge of the ViewModel, repository, or coroutines.
+
+```mermaid
+flowchart LR
+    UIState["CounterUIState<br/>(count, isLoading)"] --> Screen["CounterScreen<br/>(Composable)"]
+    Screen -- "onAction()" --> Action["CounterAction<br/>(Load / Increment / Decrement / Reset)"]
+```
+
+### Presentation — State Holder
+
+`CounterViewModel` owns the single source of truth for the screen. It receives actions, mutates state via `MutableStateFlow`, and exposes an immutable `StateFlow` for the UI to observe.
+
+```mermaid
+flowchart TD
+    Action["CounterAction"] --> VM["CounterViewModel"]
+    VM -- "increment / decrement / reset" --> State["_uiState: MutableStateFlow"]
+    VM -- "load (suspend)" --> Repo["CounterRepository"]
+    State -- "asStateFlow()" --> Exposed["uiState: StateFlow&lt;CounterUIState&gt;"]
+    Exposed --> Screen["CounterScreen"]
+```
+
+### Data — Repository
+
+`CounterRepository` is the abstraction the ViewModel depends on. `FakeCounterRepository` is today's in-memory implementation, standing in for a future real data source (network, database, etc.).
+
+```mermaid
+flowchart LR
+    VM["CounterViewModel"] --> Interface["CounterRepository<br/>(interface)"]
+    Interface <|.. Fake["FakeCounterRepository<br/>(suspend getCount)"]
+```
+
+### Composition Root — Wiring It Together
+
+`MainActivity` is where concrete dependencies are created and handed to the `ViewModelFactory`, keeping construction logic out of the ViewModel itself.
+
+```mermaid
+flowchart TD
+    Activity["MainActivity"] -- "creates" --> RepoImpl["FakeCounterRepository"]
+    Activity -- "creates with repo" --> Factory["CounterViewModelFactory"]
+    Factory -- "builds" --> VM["CounterViewModel"]
+    Activity -- "hosts" --> Route["CounterRoute"]
+    Route -- "collects uiState,<br/>forwards onAction" --> Screen["CounterScreen"]
+    VM --> Route
+```
