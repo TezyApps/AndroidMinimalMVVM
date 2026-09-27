@@ -14,14 +14,14 @@ import androidx.compose.ui.Modifier
 @Composable
 fun CounterScreen(viewModel: CounterViewModel) {
 
-    val count by viewModel.count.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Count : $count")
+        Text("Count : ${uiState.count}")
 
         Button(viewModel::increment) {
             Text("Increment")
