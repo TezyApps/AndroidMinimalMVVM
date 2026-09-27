@@ -1,10 +1,13 @@
 package com.tezyapps.minimalmvvm
 
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -62,11 +65,15 @@ class CounterViewModelTests {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `load updates count from repository`() = runTest {
-        val repo = SpyCounterRepository(count = 10)
+        val repo = SpyCounterRepository()
         val viewModel = CounterViewModel(repo)
 
         viewModel.onAction(CounterAction.Load)
 
+        runCurrent()
+        assertTrue(viewModel.uiState.value.isLoading)
+
+        repo.result.complete(10)
         advanceUntilIdle()
 
         assertEquals(10, viewModel.uiState.value.count)
@@ -78,10 +85,10 @@ class CounterViewModelTests {
 
 // Spy Repository
 
-private class SpyCounterRepository(
-    private val count: Int
-): CounterRepository {
+private class SpyCounterRepository: CounterRepository {
+    var result = CompletableDeferred<Int>()
+
     override suspend fun getCount(): Int {
-        return count
+        return result.await()
     }
 }
