@@ -7,7 +7,7 @@ class CounterViewModelTests {
 
     @Test
     fun `initial count is zero`() {
-        val viewModel = CounterViewModel()
+        val viewModel = CounterViewModel(repository = FakeCounterRepository())
         assertEquals(
             0,
             viewModel.uiState.value.count
@@ -16,7 +16,7 @@ class CounterViewModelTests {
 
     @Test
     fun `increment increases count by one`() {
-        val viewModel = CounterViewModel()
+        val viewModel = CounterViewModel(repository = FakeCounterRepository())
 
         viewModel.onAction(CounterAction.Increment)
         assertEquals(
@@ -27,7 +27,7 @@ class CounterViewModelTests {
 
     @Test
     fun `decrement decreases count by one`() {
-        val viewModel = CounterViewModel()
+        val viewModel = CounterViewModel(repository = FakeCounterRepository())
         viewModel.onAction(CounterAction.Decrement)
         assertEquals(
             -1,
@@ -37,7 +37,7 @@ class CounterViewModelTests {
 
     @Test
     fun `reset sets count to zero`() {
-        val viewModel = CounterViewModel()
+        val viewModel = CounterViewModel(repository = FakeCounterRepository())
         viewModel.onAction(CounterAction.Increment)
         viewModel.onAction(CounterAction.Increment)
         viewModel.onAction(CounterAction.Increment)

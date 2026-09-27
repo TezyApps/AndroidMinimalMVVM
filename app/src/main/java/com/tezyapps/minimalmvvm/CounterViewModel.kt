@@ -1,11 +1,15 @@
 package com.tezyapps.minimalmvvm
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class CounterViewModel: ViewModel() {
+class CounterViewModel(
+    private val repository: CounterRepository
+): ViewModel() {
 
     // Mutable property state for reactive binding similar to Combine's @Published
     private val _uiState = MutableStateFlow(CounterUIState())
@@ -15,9 +19,24 @@ class CounterViewModel: ViewModel() {
 
     fun onAction(action: CounterAction) {
         when (action) {
+            CounterAction.Load -> load()
             CounterAction.Increment -> increment()
             CounterAction.Decrement -> decrement()
             CounterAction.Reset -> reset()
+        }
+    }
+
+    private fun load() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
+
+            val count = repository.getCount()
+
+            _uiState.update {
+                it.copy(count = count, isLoading = false)
+            }
         }
     }
 
