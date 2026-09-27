@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tezyapps.minimalmvvm.ui.theme.MinimalMVVMTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,8 +20,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val viewModel = CounterViewModel()
-            CounterScreen(viewModel)
+            CounterRoute(viewModel = CounterViewModel())
         }
     }
+}
+
+@Composable
+fun CounterRoute(viewModel: CounterViewModel) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    CounterScreen(
+        uiState = uiState,
+        onAction = viewModel::onAction
+    )
 }

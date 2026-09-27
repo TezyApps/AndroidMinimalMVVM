@@ -12,9 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun CounterScreen(viewModel: CounterViewModel) {
-
-    val uiState by viewModel.uiState.collectAsState()
+fun CounterScreen(
+    uiState: CounterUIState,
+    onAction: (CounterAction) -> Unit
+) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -23,8 +24,28 @@ fun CounterScreen(viewModel: CounterViewModel) {
     ) {
         Text("Count : ${uiState.count}")
 
-        Button(viewModel::increment) {
+        Button(
+            {
+                onAction(CounterAction.Increment)
+            }
+        ) {
             Text("Increment")
+        }
+
+        Button(
+            {
+                onAction(CounterAction.Decrement)
+            }
+        ) {
+            Text("Decrement")
+        }
+
+        Button(
+            {
+                onAction(CounterAction.Reset)
+            }
+        ) {
+            Text("Reset")
         }
     }
 }

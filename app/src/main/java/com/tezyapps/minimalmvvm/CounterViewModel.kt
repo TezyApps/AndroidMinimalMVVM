@@ -13,11 +13,33 @@ class CounterViewModel: ViewModel() {
     // private(set) property state
     val uiState = _uiState.asStateFlow()
 
-    fun increment() {
+    fun onAction(action: CounterAction) {
+        when (action) {
+            CounterAction.Increment -> increment()
+            CounterAction.Decrement -> decrement()
+            CounterAction.Reset -> reset()
+        }
+    }
+
+    private fun increment() {
         _uiState.update { currentState ->
             currentState.copy(
                 count = currentState.count + 1
             )
+        }
+    }
+
+    private fun decrement() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                count = currentState.count - 1
+            )
+        }
+    }
+
+    private fun reset() {
+        _uiState.update { currentState ->
+            currentState.copy(count = 0)
         }
     }
 
