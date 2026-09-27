@@ -61,7 +61,7 @@ flowchart TD
 ```mermaid
 flowchart LR
     VM["CounterViewModel"] --> Interface["CounterRepository<br/>(interface)"]
-    Interface <|.. Fake["FakeCounterRepository<br/>(suspend getCount)"]
+    Fake["FakeCounterRepository<br/>(suspend getCount)"] -. implements .-> Interface
 ```
 
 ### Composition Root — Wiring It Together
