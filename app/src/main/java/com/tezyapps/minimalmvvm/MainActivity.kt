@@ -12,18 +12,30 @@ import com.tezyapps.minimalmvvm.counter.data.FakeCounterRepository
 import com.tezyapps.minimalmvvm.counter.domain.CounterViewModelFactory
 import com.tezyapps.minimalmvvm.counter.ui.CounterScreen
 import com.tezyapps.minimalmvvm.counter.ui.CounterViewModel
+import com.tezyapps.minimalmvvm.todo.data.TodoAPI
+import com.tezyapps.minimalmvvm.todo.data.TodoRemoteRepository
+import com.tezyapps.minimalmvvm.todo.domain.APIClient
+import com.tezyapps.minimalmvvm.todo.domain.TodoViewModelFactory
+import com.tezyapps.minimalmvvm.todo.presentation.TodoScreen
+import com.tezyapps.minimalmvvm.todo.presentation.TodoUIState
+import com.tezyapps.minimalmvvm.todo.presentation.TodoViewModel
 
 class MainActivity : ComponentActivity() {
 
     private val repository = FakeCounterRepository()
+    private val todoRepository = TodoRemoteRepository(api = APIClient.todoAPI)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val factory = CounterViewModelFactory(repository)
-            val viewModel: CounterViewModel = viewModel(factory = factory)
-            CounterRoute(viewModel = viewModel)
+//            val factory = CounterViewModelFactory(repository)
+//            val viewModel: CounterViewModel = viewModel(factory = factory)
+//            CounterRoute(viewModel = viewModel)
+
+            val factory = TodoViewModelFactory(todoRepository)
+            val viewModel: TodoViewModel = viewModel(factory = factory)
+            TodoRoute(viewModel)
         }
     }
 }
@@ -35,4 +47,10 @@ fun CounterRoute(viewModel: CounterViewModel) {
         uiState = uiState,
         onAction = viewModel::onAction
     )
+}
+
+@Composable
+fun TodoRoute(viewModel: TodoViewModel) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    TodoScreen(uiState = uiState, onLoad = viewModel::loadTodo)
 }

@@ -1,4 +1,4 @@
-package com.tezyapps.minimalmvvm.counter.domain
+package com.tezyapps.minimalmvvm.todo.domain
 
 import kotlinx.serialization.Serializable
 
