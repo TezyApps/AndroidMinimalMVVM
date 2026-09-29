@@ -8,6 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tezyapps.minimalmvvm.counter.data.FakeCounterRepository
+import com.tezyapps.minimalmvvm.counter.domain.CounterViewModelFactory
+import com.tezyapps.minimalmvvm.counter.ui.CounterScreen
+import com.tezyapps.minimalmvvm.counter.ui.CounterViewModel
 
 class MainActivity : ComponentActivity() {
 

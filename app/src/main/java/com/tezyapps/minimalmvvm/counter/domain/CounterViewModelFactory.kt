@@ -1,7 +1,9 @@
-package com.tezyapps.minimalmvvm
+package com.tezyapps.minimalmvvm.counter.domain
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.tezyapps.minimalmvvm.counter.data.CounterRepository
+import com.tezyapps.minimalmvvm.counter.ui.CounterViewModel
 
 class CounterViewModelFactory(
     private val repository: CounterRepository

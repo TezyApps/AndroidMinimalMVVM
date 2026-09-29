@@ -1,4 +1,4 @@
-package com.tezyapps.minimalmvvm
+package com.tezyapps.minimalmvvm.counter.data
 
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds

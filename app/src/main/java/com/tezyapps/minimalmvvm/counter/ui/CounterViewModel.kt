@@ -1,7 +1,8 @@
-package com.tezyapps.minimalmvvm
+package com.tezyapps.minimalmvvm.counter.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tezyapps.minimalmvvm.counter.data.CounterRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

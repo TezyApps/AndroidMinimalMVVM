@@ -1,4 +1,4 @@
-package com.tezyapps.minimalmvvm
+package com.tezyapps.minimalmvvm.counter.ui
 
 sealed interface CounterAction {
     data object Load: CounterAction
