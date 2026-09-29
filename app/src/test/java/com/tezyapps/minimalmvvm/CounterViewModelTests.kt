@@ -1,6 +1,6 @@
 package com.tezyapps.minimalmvvm
 
-import com.tezyapps.minimalmvvm.counter.data.CounterRepository
+import com.tezyapps.minimalmvvm.counter.domain.CounterRepository
 import com.tezyapps.minimalmvvm.counter.data.FakeCounterRepository
 import com.tezyapps.minimalmvvm.counter.ui.CounterAction
 import com.tezyapps.minimalmvvm.counter.ui.CounterViewModel
